@@ -26,6 +26,7 @@ import cn.sh.sbl.hotel.beans.MenuFilmKey;
 import cn.sh.sbl.hotel.dao.FilmMapper;
 import cn.sh.sbl.hotel.dao.MenuFilmMapper;
 import cn.sh.sbl.hotel.dao.MenuMapper;
+import cn.sh.sbl.hotel.service.ICategoryService;
 import cn.sh.sbl.hotel.service.IMenuFilmService;
 import cn.sh.sbl.hotel.vo.FilmVo;
 
@@ -49,23 +50,20 @@ public class MenuFilmService implements IMenuFilmService {
 	private FilmMapper filmMapper;
 	
 	/**
-	 * 按联合主键查找
-	 * @param menuFilmKey
-	 * @return
+	 * @see IMenuFilmService#getByPrimaryKey(MenuFilmKey)
 	 */
-	public MenuFilm getByPrimarryKey(MenuFilmKey menuFilmKey){
+	public MenuFilm getByPrimaryKey(MenuFilmKey menuFilmKey){
 		return menuFilmMapper.selectByPrimaryKey(menuFilmKey);
 	}
 	
 	/**
-	 * 查找全部MenuFilm
+	 * @see IMenuFilmService#findAll()
 	 */
 	public List<MenuFilm> findAll() {
 		return this.menuFilmMapper.selectByExample(null);
 	}
-
 	/**
-	 * 查找菜单下全部MenuFilm
+	 * @see IMenuFilmService#getMenuFilmByMenuId(int)
 	 */
 	public List<MenuFilm> getMenuFilmByMenuId(int menuid) {
 		MenuExample menuExample = new MenuExample();
@@ -82,9 +80,7 @@ public class MenuFilmService implements IMenuFilmService {
 	}
 
 	/**
-	 * 添加菜单节目关系
-	 * @param menu
-	 * @param films 可以批量添加节目到菜单
+	 * @see IMenuFilmService#addMenuFilm(int, List)
 	 */
 	@Transactional(rollbackFor=RuntimeException.class)
 	public void addMenuFilm(int menuId, List<String> filmIds) {
@@ -110,9 +106,11 @@ public class MenuFilmService implements IMenuFilmService {
 	
 	/**
 	 * 检查某个节目是否与菜单已经存在关系
+	 * Description: Check whether The MenuFilm with the menuId and filmId has been
+	 * 				existed in Database.
 	 * @param menuId
 	 * @param filmId
-	 * @return
+	 * @return A Boolean Value True or False.
 	 */
 	public boolean isMenuFilmExist(int menuId, String filmId) {
 		MenuFilmKey key = new MenuFilmKey();
@@ -122,7 +120,7 @@ public class MenuFilmService implements IMenuFilmService {
 	}
 
 	/**
-	 * 删除节目栏目关系
+	 * @see IMenuFilmService#deleteMenuFilm(MenuFilm)
 	 */
 	public void deleteMenuFilm(MenuFilm menuFilm) {
 		menuFilmMapper.deleteByPrimaryKey(menuFilm);
@@ -130,7 +128,6 @@ public class MenuFilmService implements IMenuFilmService {
 	}
 	
 	/*
-	 * (non-Javadoc)
 	 * @see cn.sh.sbl.hotel.service.IMenuFilmService#findFilmByMenuId(int)
 	 * 由菜单id返回电影列表
 	 */
@@ -146,7 +143,9 @@ public class MenuFilmService implements IMenuFilmService {
 		return films;
 	}
 	
-	
+	/**
+	 * @see IMenuFilmService#findFilmByMenuId(int)
+	 */
 	public List<FilmVo> findFilmVoByMenuId(int menuid) {
 		List<MenuFilm> menuFilms = this.getMenuFilmByMenuId(menuid);
 		List<FilmVo> filmVos = new ArrayList<FilmVo>();

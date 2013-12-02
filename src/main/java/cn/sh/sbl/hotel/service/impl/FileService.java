@@ -44,10 +44,16 @@ public class FileService implements IFileService {
 	@Autowired
 	private CategoryMapper categoryMapper;
 	
+	/**
+	 * @see IFileService#findAll()
+	 */
 	public List<File> findAll() {
 		return this.fileMapper.selectByExample(null);
 	}
 	
+	/**
+	 * @see IFileService#findFileByFilmId(String)
+	 */
 	public List<File> findFileByFilmId(String filmId) {
 		List<File> files = new ArrayList<File>();
 		FileExample fileExample = new FileExample();
@@ -57,6 +63,19 @@ public class FileService implements IFileService {
 		return files;
 	}
 	
+	/**
+	 * @see IFileService#deleteFileByFilmId(String)
+	 */
+	public void deleteFileByFilmId(String filmId){
+		List<File> files = this.findFileByFilmId(filmId);
+		for(File f : files) {
+			fileMapper.deleteByPrimaryKey(f);
+		}
+	}
+	
+	/**
+	 * @see IFileService#findPostFileByFilmId(String)
+	 */
 	public File findPostFileByFilmId(String filmId) {
 		Category category = getFileTypeCategoryId(FileType.Poster);
 		if(null != category) {
@@ -70,6 +89,9 @@ public class FileService implements IFileService {
 		return null;
 	}
 	
+	/**
+	 * @see IFileService#getFileTypeCategoryId(FileType)
+	 */
 	public Category getFileTypeCategoryId(FileType fileType) {
 		CategoryExample example = new CategoryExample();
 		example.createCriteria().andCkeyEqualTo(CategoryEnum.FileType.name())

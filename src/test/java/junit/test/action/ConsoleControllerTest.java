@@ -56,7 +56,10 @@ public class ConsoleControllerTest {
 		mockMvc = MockMvcBuilders.standaloneSetup(consoleController).build();
 		
 	}
-	
+	/**
+	 * @see ConsoleController#getAllMenu(org.springframework.ui.ModelMap)
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetAllMenu()throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
@@ -66,6 +69,11 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	}
 	
+	/**
+	 * description : A test for adding Menu failed in background manager interface.
+	 * @see ConsoleController#addMenu(org.springframework.web.multipart.MultipartFile, org.springframework.web.multipart.MultipartFile, String, Integer, javax.servlet.http.HttpServletRequest, org.springframework.ui.ModelMap)
+	 * @throws Exception
+	 */
 	@Test
 	public void testAddMenuFailed() throws Exception {
 		String iconFileName = "icon.png";
@@ -84,6 +92,11 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	}
 	
+	/**
+	 * description : A test for adding Menu failed in background manager interface.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testAddMenuSuccess() throws Exception {
 		String iconFileName = "icon.png";
@@ -102,6 +115,10 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	}
 	
+	/**
+	 * description : A test for get a menu detail infomation.
+	 * @throws Exception
+	 */
 	@Test
 	@Ignore
 	public void testGetSimpleMenu_c() throws Exception {
@@ -113,7 +130,10 @@ public class ConsoleControllerTest {
 	}
 	
 	
-	
+	/**
+	 * description : A test for upload files
+	 * @throws Exception
+	 */
 	@Test
 	public void testUpload() throws Exception {
 		String originalFilename = "jetty-distribution-9.1.0.v20131115.tar.gz";
@@ -140,6 +160,10 @@ public class ConsoleControllerTest {
 		assertTrue(resource.getFile().exists());
 	}
 
+	/**
+	 * description : A test for rename the Menu.
+	 * @throws Exception
+	 */
 	@Test
 	public void testRenameMenu() throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
@@ -149,6 +173,10 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	} 
 	
+	/**
+	 * decription : A test for find Films by menuId.
+	 * @throws Exception
+	 */
 	@Test
 	public void testFindFilmByMenuId() throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
@@ -158,6 +186,10 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	}
 	
+	/**
+	 * decription : A test for get all Films.
+	 * @throws Exception
+	 */
 	@Test
 	public void testFindAllFilm() throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
@@ -167,6 +199,10 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	}
 	
+	/**
+	 * description : A test for Publishing Films into a Menu.
+	 * @throws Exception
+	 */
 	@Test
 	public void testPublishFilm() throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
@@ -176,6 +212,10 @@ public class ConsoleControllerTest {
 		assertEquals(200, mr.getResponse().getStatus());
 	}
 	
+	/**
+	 * description : A test for Adding Film.
+	 * @throws Exception
+	 */
 	@Test
 //	@Ignore("unimplement")
 	public void testAddFilm() throws Exception {

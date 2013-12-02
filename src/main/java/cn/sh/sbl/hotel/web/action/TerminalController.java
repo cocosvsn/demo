@@ -65,8 +65,12 @@ public class TerminalController {
 	}
 	
 	/**
-	 * 用于终端一级栏目的展现和子栏目的展现, 进入主界面或进入非叶子栏目执行
-	 * @param id 父级菜单编号(如果是进入主界面执行, 则id==root)
+	 * description: This is a Terminal controller method, it will get the
+	 * 				children Menus from the background Databases of the given present Menu id
+	 * 				when invoked through the exposed URL(/t/menu/{id}.json) by terminal
+	 * 				display page.
+	 * @param id  
+	 *        The parent id of the menu.
 	 * @param modelMap
 	 * @return
 	 */
@@ -82,7 +86,10 @@ public class TerminalController {
 	}
 	
 	/**
-	 * 用于终端栏目下的影片展现, 点击进入叶子栏目执行(hasChild==false)
+	 * description: This is a Terminal controller method, it will get the Film
+	 *          	List from the background Databases Published in the given present Menu id
+	 * 				when invoked through the exposed URL(/t/films/{id}.json) by terminal
+	 *			    display page. 
 	 * @param id
 	 * @param modelMap
 	 * @return
@@ -110,8 +117,12 @@ public class TerminalController {
 	}
 	
 	/**
-	 * 点击栏目下的海报执行
-	 * @param id 影片编号
+	 * description: This is a Terminal controller method, it will get the detail
+	 * 				infomation of a Film from the background Databases when invoked through
+	 * 				the exposed URL(/t/film/{id}.json) by terminal display page.
+	 * 
+	 * @param id
+	 *            The id of Film
 	 * @param modelMap
 	 * @return
 	 */
@@ -145,8 +156,11 @@ public class TerminalController {
 	}
 	
 	/**
-	 * 终端开始播放影片时执行
-	 * @param id 影片编号
+	 *  description: This is a Terminal controller method, it will be excuted 
+	 * 				when invoked through the exposed URL(/t/play/{id}.json) by terminal
+	 *			    display page when it start to play a Film.
+	 *
+	 * @param id  The id of the film will play.
 	 * @param modelMap
 	 * @return
 	 */
@@ -159,8 +173,10 @@ public class TerminalController {
 	}
 	
 	/**
-	 * 终端停止播放影片时执行
-	 * @param id 影片编号
+	 * description: This is a Terminal controller method, it will be excuted 
+	 * 				when invoked through the exposed URL(/t/stop/{id}.json) by terminal
+	 *			    display page when it stop play a Film.
+	 * @param id The id of the film being played.
 	 * @param modelMap
 	 * @return
 	 */

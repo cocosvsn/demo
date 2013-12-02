@@ -37,13 +37,14 @@ import cn.sh.sbl.hotel.service.IFileService;
 import cn.sh.sbl.hotel.service.IFilmService;
 import cn.sh.sbl.hotel.service.IMenuFilmService;
 import cn.sh.sbl.hotel.service.IMenuService;
+import cn.sh.sbl.hotel.service.impl.MenuFilmService;
 
 /**
  * @author samsung 
  * @E-mail: cxxwode@163.com
  * @version 1.0 
  * @date 2013-11-23 下午7:27:07
- * @description TODO
+ * @description 
  */
 @Controller
 @RequestMapping("/c")
@@ -61,9 +62,57 @@ public class ConsoleController {
 	@Autowired
 	private IMenuFilmService menuFilmService;
 	
-
+	
+	/** 
+	 * description: This is a controller method, it will return a List
+	 * 				of Films with the data type like json,xml from the background
+	 * 				Databases when invoked through exposed URL(/c/menuFilm/Test/{id}.json)
+	 * 				by background manager interface. 
+	 * @param id  
+	 * @param modelMap
+	 * @return   
+	 */
+	@RequestMapping(value={"/menuFilm/Test/{id}"})  
+	@Transactional
+	public ModelAndView getFilmsByMenuId(@PathVariable("id")int id, 
+			ModelMap modelMap){
+		List<Film> films = new ArrayList<Film>();
+		films = menuFilmService.findFilmByMenuId(id);
+		modelMap.put("films", films);
+		return new ModelAndView("film", modelMap); 
+	}
+	
+	@RequestMapping(value={"/menu/Test"})
+	@Transactional
+	public ModelAndView getAllMenuTest(ModelMap modelMap) {
+		List<Menu> menuList = new ArrayList<Menu>();
+		menuList = this.menuService.findAll();
+//		String s1 = "{id:100, parent:1, name:\"节目管理\", open:true}";
+//		String s2 = "{id:101, parent:100, name:\"节目添加\", file:\"film/addFilm\"}";
+//		String s3 = "{id:102, parent:100, name:\"节目维护\", file:\"film/maintainFilm\"}";
+//		String s4 = "{id:103, parent:100, name:\"节目查询\", file:\"film/queryFilm\"}";
+		Menu m1 = new Menu();
+		Menu m2 = new Menu();
+		Menu m3 = new Menu();
+		Menu m4 = new Menu();
+		m1.setId(100);m1.setParent(1);m1.setName("节目管理");
+		m2.setId(101);m2.setParent(100);m2.setName("节目添加");
+		m3.setId(102);m3.setParent(100);m3.setName("节目维护");
+		m4.setId(103);m4.setParent(100);m4.setName("节目查询");
+		menuList.add(m1);
+		menuList.add(m2);
+		menuList.add(m3);
+		menuList.add(m4);
+		modelMap.put("menuList1", menuList);
+		return new ModelAndView("menu", modelMap);
+	}
+	
+	
 	/**
-	 * this method will get all menu for the menuTree
+	 * description: This is a controller method, it will return all of the Menu
+	 *              with the data type like json,xml from the background
+	 * 				Databases when invoked through exposed URL(/c/menu/all.json)
+	 * 				by background manager interface.
 	 * @param modelMap
 	 * @return
 	 */
@@ -81,7 +130,10 @@ public class ConsoleController {
 	}
 	
 	/**
-	 * 获取指定菜单信息
+	 * description: This is a controller method, it will return detail of the Menu
+	 *              with the data type like json,xml from the background
+	 * 				Databases when invoked through exposed URL(/c/menu/{id}.json)
+	 * 				by background manager interface.
 	 * @param id
 	 * @param modelMap
 	 * @return
@@ -94,14 +146,25 @@ public class ConsoleController {
 	}
 	
 	/**
-	 * delete menu
-	 * @param id  the id of menu
+	 *  description: This is a controller method, it will delete the Menu
+	 *              in the background Databases when invoked through exposed 
+	 *              URL(/c/menu/del) by background manager interface.
+	 * @param id  the id of menu.
 	 * @return
 	 */
+	
+	@RequestMapping(value={"/menu/del"})
 	public Object delMenu(@PathVariable("id")int id) {
 		return null;
 	}
 	
+	/**
+	 *  description: This is a controller method, it will add a Menu
+	 *              in the background Databases when invoked through exposed 
+	 *              URL(/c/menu/add) by background manager interface.
+	 * @param id  the id of menu.
+	 * @return
+	 */
 	@RequestMapping(value={"/menu/add"})
 	public ModelAndView addMenu(@RequestParam("icon")MultipartFile icon, 
 			@RequestParam("focusIcon")MultipartFile focusIcon, 
@@ -124,6 +187,13 @@ public class ConsoleController {
 			upload(realPath, icon, null);
 			upload(realPath, focusIcon, null);
 			// TODO new Menu()  to save
+			Menu menu = new Menu();
+			menu.setName(name);
+			menu.setIcon(realPath + "/upload/" + icon.getOriginalFilename());
+			menu.setFocusIcon(realPath + "/upload/" + icon.getOriginalFilename());
+			menu.setParent(parent);
+			menu.setPath("");
+			menuService.save(menu);
 //			this.menuService.save(menu);
 			modelMap.put(RETURN_STATUS, "OK");
 		} catch (Exception e) {
@@ -134,6 +204,15 @@ public class ConsoleController {
 		return new ModelAndView("add_menu", modelMap);
 	}
 	
+	/**
+	 *  description: This is a controller method, it will rename a Menu
+	 *              in the background Databases when invoked through exposed 
+	 *              URL(/c/menu/rename/{id}/{name}.json) by background manager interface.
+	 * @param id  The id of the Menu.
+	 * @param name  The new name of the Menu.
+	 * @param modelMap
+	 * @return
+	 */
 	@RequestMapping("/menu/rename/{id}/{name}")
 	public ModelAndView renameMenu(@PathVariable("id")int id, @PathVariable("name")String name, ModelMap modelMap) {
 		Menu menu = this.menuService.get(id);
@@ -150,7 +229,15 @@ public class ConsoleController {
 		return new ModelAndView("rename", modelMap);
 	}
 	
-	
+	/**
+	 * decription : A method upload file from local to server or a specific location.
+	 * @param realPath
+	 * @param mf
+	 * @param newName
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
 	public String upload(String realPath, MultipartFile mf, String newName) throws IllegalStateException, IOException {
 		if(mf.isEmpty()) {
 			logger.debug("empty file: {}!", mf);
@@ -177,7 +264,7 @@ public class ConsoleController {
 	}
 	
 	/**
-	 * this is test url pattern is a template
+	 * this is a demo just for testing upload files.
 	 * @param modelMap
 	 * @return
 	 */
@@ -229,7 +316,9 @@ public class ConsoleController {
 	}
 	
 	/**
-	 * find all film
+	 * description: This is a controller method, it will return the all films
+	 *              in the background Databases when invoked through exposed 
+	 *              URL(/c/films/all.json) by background manager interface.
 	 * @param modelMap
 	 * @return
 	 */
@@ -240,6 +329,16 @@ public class ConsoleController {
 		return new ModelAndView("", modelMap);
 	}
 	
+	/**
+	* description: This is a controller method, it will return a List
+	 * 				of Films Published in the request Menu with the 
+	 * 				data type like json,xml from the background
+	 * 				Databases when invoked through exposed URL(/c/menu/films/{id}.json)
+	 * 				by background manager interface. 
+	 * @param id
+	 * @param modelMap
+	 * @return
+	 */
 	@RequestMapping("/menu/films/{id}")
 	public ModelAndView getFilmByMenu(@PathVariable int id, ModelMap modelMap) {
 		try {
@@ -260,6 +359,16 @@ public class ConsoleController {
 		return new ModelAndView("menu_films", modelMap);
 	}
 	
+	
+	/**
+	 * description: This is a controller method, it will add MenuFilm records
+	 * 				into the background  Databases when invoked through the 
+	 * 				exposed URL(/c/menuFilm/publish/{menuId}.json) by background manager interface. 
+	 * @param menuId 
+	 * @param filmId
+	 * @param modelMap
+	 * @return
+	 */
 	@RequestMapping("/menu/publish/{menuId}")
 	public ModelAndView publishFilm(@PathVariable("menuId") int menuId, 
 			@RequestParam("filmId[]") String[] filmId, ModelMap modelMap) {
@@ -275,6 +384,27 @@ public class ConsoleController {
 		return new ModelAndView("publish", modelMap);
 	}
 	
+	/**
+	 * description: This is a controller method, it will add a Film record
+	 * 				into the background  Databases when invoked through the 
+	 * 				exposed URL(/c/film/add) by background manager interface. 
+	 * @param title
+	 * @param actor
+	 * @param director
+	 * @param language
+	 * @param release_year
+	 * @param country
+	 * @param length
+	 * @param genre
+	 * @param ratings
+	 * @param description
+	 * @param poster
+	 * @param content
+	 * @param srt
+	 * @param request
+	 * @param modelMap
+	 * @return
+	 */
 	@RequestMapping("/film/add")
 	public ModelAndView addFilm(@RequestParam("title") String title,
 			@RequestParam(required=false) String actor,
@@ -349,6 +479,12 @@ public class ConsoleController {
 		return new ModelAndView("add_film", modelMap);
 	}
 	
+	/**
+	 * 
+	 * @param oldName
+	 * @param newName
+	 * @return
+	 */
 	private String rename(String oldName, String newName) {
 		return "upload/" + newName + oldName.substring(oldName.lastIndexOf("."));
 	}
