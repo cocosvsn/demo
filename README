@@ -1,0 +1,6 @@
+1. Setup environment 
+2. create database [demo]
+3. import SQL script src/main/resources/demo.sql
+4. change src/main/resources/config.properties database.url and username, password
+5. import project to myeclipse or eclipse by maven import
+6. deploy to tomcat server then click run it
