@@ -38,8 +38,8 @@ public class MenuService implements IMenuService {
 	public List<Menu> getChildrenById(int id){
 		MenuExample example = new MenuExample();
 		example.createCriteria().andParentEqualTo(id)
-			.andValidEqualTo(true)
-			.andHasChildEqualTo(true);
+			.andValidEqualTo(true);
+		example.setOrderByClause("display_order");
 		return menuMapper.selectByExample(example);
 	}
 	

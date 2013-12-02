@@ -52,6 +52,7 @@ public class MenuTest {
 	private IFileService fileService;
 	
 	@Test
+	@Ignore
 	public void testFindMenuByParentId() {
 		// menu service 
 		assertTrue(0 < this.menuService.findAll().size());
@@ -71,6 +72,7 @@ public class MenuTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testFindFilmByMenuId_1() {
 		List<FilmVo> filmVos = new ArrayList<FilmVo>();
 		List<Film> films = this.menuFilmService.findFilmByMenuId(2);

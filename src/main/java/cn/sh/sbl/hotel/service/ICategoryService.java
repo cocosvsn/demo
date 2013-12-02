@@ -23,4 +23,6 @@ public interface ICategoryService {
 	public List<Category> findAll();
 	
 	public List<Category> findByKey(String key);
+	
+	public Category getById(int id);
 }

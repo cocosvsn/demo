@@ -38,4 +38,8 @@ public class CategoryService implements ICategoryService {
 		example.createCriteria().andCkeyEqualTo(key);
 		return this.categoryMapper.selectByExample(example);
 	}
+	
+	public Category getById(int id) {
+		return this.categoryMapper.selectByPrimaryKey(id);
+	}
 }

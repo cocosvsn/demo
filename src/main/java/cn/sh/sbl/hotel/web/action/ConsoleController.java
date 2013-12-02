@@ -72,6 +72,10 @@ public class ConsoleController {
 	@Transactional
 	public ModelAndView getAllMenu(ModelMap modelMap) {
 		List<Menu> menuList = this.menuService.findAll();
+		for (Menu menu : menuList) {
+			menu.setIcon(null);
+			menu.setFocusIcon(null);
+		}
 		modelMap.put("menuList", menuList);
 		return new ModelAndView("menu", modelMap);
 	}

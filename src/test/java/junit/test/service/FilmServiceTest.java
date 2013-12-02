@@ -57,14 +57,14 @@ public class FilmServiceTest {
 		File posterFile = new File();
 		posterFile.setFilmId(film.getId());
 		posterFile.setFileName("asdfk.png");
-		posterFile.setCategoryFilm(14);
+		posterFile.setCategoryFilm(4);
 		posterFile.setFileSize(239423L);
 		list.add(posterFile);
 		
 		File contentFile = new File();
 		contentFile.setFilmId(film.getId());
 		contentFile.setFileName("asdfk.ts");
-		contentFile.setCategoryFilm(13);
+		contentFile.setCategoryFilm(3);
 		contentFile.setFileSize(234555L);
 		list.add(contentFile);
 		this.filmService.addFilm(film, list);
@@ -82,13 +82,13 @@ public class FilmServiceTest {
 		File posterFile = new File();
 		posterFile.setFilmId(film.getId());
 		posterFile.setFileName("4sdfk.png");
-		posterFile.setCategoryFilm(14);
+		posterFile.setCategoryFilm(4);
 		posterFile.setFileSize(4334534L);
 		list.add(posterFile);
 		
 		File contentFile = new File();
 		contentFile.setFileName("asdfk.ts");
-		contentFile.setCategoryFilm(13);
+		contentFile.setCategoryFilm(3);
 		contentFile.setFileSize(34543534L); 
 		list.add(contentFile);
 		this.filmService.addFilm(film, list);

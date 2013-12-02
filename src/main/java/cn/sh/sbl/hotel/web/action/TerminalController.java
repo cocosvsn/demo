@@ -7,7 +7,6 @@
  */
 package cn.sh.sbl.hotel.web.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,16 +18,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.sh.sbl.hotel.beans.Category;
 import cn.sh.sbl.hotel.beans.File;
+import cn.sh.sbl.hotel.beans.FileType;
 import cn.sh.sbl.hotel.beans.Film;
 import cn.sh.sbl.hotel.beans.Menu;
+import cn.sh.sbl.hotel.service.ICategoryService;
 import cn.sh.sbl.hotel.service.IFileService;
 import cn.sh.sbl.hotel.service.IFilmService;
 import cn.sh.sbl.hotel.service.IMenuFilmService;
 import cn.sh.sbl.hotel.service.IMenuService;
-import cn.sh.sbl.hotel.vo.FileList;
-import cn.sh.sbl.hotel.vo.FilmList;
-import cn.sh.sbl.hotel.vo.FilmVo;
 
 /**
  * @author bunco 
@@ -50,6 +49,8 @@ public class TerminalController {
 	private IMenuFilmService menuFilmService;
 	@Autowired
 	private IFileService fileService;
+	@Autowired
+	private ICategoryService categoryService;
 	
 	
 	/**
@@ -93,16 +94,18 @@ public class TerminalController {
 		//Menu presentMenu = this.menuService.get(id);
 		//logger.debug("{}菜单{}合法{}子节点",presentMenu.getName(),presentMenu.getValid(),!presentMenu.getHasChild());
 		
-		List<FilmVo> filmVos = new ArrayList<FilmVo>();
 		List<Film> films = this.menuFilmService.findFilmByMenuId(id);
 		for(Film f : films) {
 			logger.debug("{}====",films.size());
-			FilmVo filmVo = new FilmVo(f.getId(), f.getTitle());
+			Category category = this.fileService.getFileTypeCategoryId(FileType.Poster);
 			List<File> files = this.fileService.findFileByFilmId(f.getId());
-			filmVo.setFileList(new FileList(files));
-			filmVos.add(filmVo);
+			for (File file : files) {
+				if (category.getId().equals(file.getCategoryFilm())) {
+					f.setRemark(file.getFileName());
+				}
+			}
 		}
-		modelMap.put("film", new FilmList(filmVos));
+		modelMap.put("film", films);
 		return new ModelAndView("films", modelMap);
 	}
 	
@@ -120,11 +123,24 @@ public class TerminalController {
 		
 		Film f = this.filmService.get(id);
 		logger.debug("{}",f.getTitle());
-		FilmVo filmVo = new FilmVo(f.getId(), f.getTitle());
+		modelMap.put("film", f);
 		List<File> files = this.fileService.findFileByFilmId(f.getId());
-		filmVo.setFileList(new FileList(files));
-		
-		modelMap.put("filmVo", filmVo);
+		for (File file : files) {
+			Category category = this.categoryService.getById(file.getCategoryFilm());
+			switch (FileType.valueOf(category.getCval())) {
+			case Content:
+				modelMap.put("Content", file);
+				break;
+			case Poster:
+				modelMap.put("Poster", file);
+				break;
+			case Subtitle:
+				modelMap.put("Subtitle", file);
+				break;
+			default:
+				break;
+			}
+		}
 		return new ModelAndView("film", modelMap);
 	}
 	

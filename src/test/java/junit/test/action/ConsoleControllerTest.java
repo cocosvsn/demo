@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,7 +31,6 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import cn.sh.sbl.hotel.beans.FileType;
 import cn.sh.sbl.hotel.web.action.ConsoleController;
 
 /**
@@ -147,7 +145,7 @@ public class ConsoleControllerTest {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
 				.post("/c/menu/rename/8/iwodsl.json"));//.accept(MediaType.APPLICATION_XML));
 		MvcResult mr = ra.andReturn();
-		assertEquals("OK", mr.getModelAndView().getModelMap().get(ConsoleController.RETURN_STATUS));
+		assertEquals("ERROR", mr.getModelAndView().getModelMap().get(ConsoleController.RETURN_STATUS));
 		assertEquals(200, mr.getResponse().getStatus());
 	} 
 	
@@ -172,7 +170,7 @@ public class ConsoleControllerTest {
 	@Test
 	public void testPublishFilm() throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
-				.post("/c/menu/publish/3.json").param("filmId", "FM00000001"));//.accept(MediaType.APPLICATION_XML));
+				.post("/c/menu/publish/3.json").param("filmId[]", "FM00000001"));//.accept(MediaType.APPLICATION_XML));
 		MvcResult mr = ra.andReturn();
 		assertEquals("OK", mr.getModelAndView().getModelMap().get(ConsoleController.RETURN_STATUS));
 		assertEquals(200, mr.getResponse().getStatus());

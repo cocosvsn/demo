@@ -77,7 +77,5 @@ public class FileService implements IFileService {
 		List<Category> categories = categoryMapper.selectByExample(example);
 		return categories.size() > 0 ? categories.get(0) : null;
 	}
-	
-	
 }
 
